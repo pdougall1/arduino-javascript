@@ -1,7 +1,7 @@
 {
-  "name": "babel-library-boilerplate",
-  "version": "3.1.0",
-  "description": "Author libraries in ES2015 for Node and the browser.",
+  "name": "arduino-javascript",
+  "version": "0.0.1",
+  "description": "Build javascript appications that interface with arduino devices.",
   "main": "dist/library-dist.js",
   "scripts": {
     "test": "gulp",
@@ -11,25 +11,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/babel/babel-library-boilerplate.git"
+    "url": "https://github.com/pdougall1/arduino-javascript.git"
   },
   "keywords": [
-    "boilerplate",
-    "es6",
-    "es2015",
-    "node",
-    "starter",
-    "kit",
-    "transpile",
-    "6to5",
-    "babel"
+    "arduino",
+    "javascript",
+    "library",
+    "avr109",
+    "chrome",
+    "serial",
+    "wrapper",
+    "comingle"
   ],
-  "author": "Jmeas",
+  "author": "Patrick Dougall",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/babel/babel-library-boilerplate/issues"
+    "url": "https://github.com/pdougall1/arduino-javascript/issues"
   },
-  "homepage": "https://github.com/babel/babel-library-boilerplate",
+  "homepage": "https://github.com/pdougall1/arduino-javascript",
   "devDependencies": {
     "babel": "^5.0.0",
     "babel-core": "^5.2.17",
@@ -64,8 +63,8 @@
     "vinyl-source-stream": "^1.0.0"
   },
   "babelBoilerplateOptions": {
-    "entryFileName": "index",
-    "exportVarName": "MyLibrary",
+    "entryFileName": "main",
+    "exportVarName": "Arduino",
     "mochaGlobals": [
       "stub",
       "spy",

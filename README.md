@@ -1,3 +1,18 @@
+# Getting Started
+
+### Testing
+
+Bootstrap the testing machinery and have livereload watch the test runner.
+
+```
+$ gulp test-browser
+```
+
+This will also build the tmp directory which is the compiled JS that runs the tests.
+
+
+#_____________________________________________________
+
 # babel-library-boilerplate
 [![Travis build status](http://img.shields.io/travis/babel/babel-library-boilerplate.svg?style=flat)](https://travis-ci.org/babel/babel-library-boilerplate)
 [![Code Climate](https://codeclimate.com/github/babel/babel-library-boilerplate/badges/gpa.svg)](https://codeclimate.com/github/babel/babel-library-boilerplate)

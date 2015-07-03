@@ -1,33 +1,33 @@
-import MyLibrary from '../../src/index';
+// import Arduino from '../../src/main';
 
-describe('A feature test', () => {
-  describe('one function', () => {
-    beforeEach(() => {
-      spy(MyLibrary, 'mainFn');
-      MyLibrary.mainFn();
-    });
+// describe('A feature test', () => {
+//   describe('one function', () => {
+//     beforeEach(() => {
+//       spy(Arduino, 'mainFn');
+//       Arduino.mainFn();
+//     });
 
-    it('should have been run once', () => {
-      expect(MyLibrary.mainFn).to.have.been.calledOnce;
-    });
+//     it('should have been run once', () => {
+//       expect(Arduino.mainFn).to.have.been.calledOnce;
+//     });
 
-    it('should have always returned hello', () => {
-      expect(MyLibrary.mainFn).to.have.always.returned('hello');
-    });
-  });
+//     it('should have always returned hello', () => {
+//       expect(Arduino.mainFn).to.have.always.returned('hello');
+//     });
+//   });
 
-  describe('another function', () => {
-    beforeEach(() => {
-      spy(MyLibrary, 'anotherFn');
-      MyLibrary.anotherFn();
-    });
+//   describe('another function', () => {
+//     beforeEach(() => {
+//       spy(Arduino, 'anotherFn');
+//       Arduino.anotherFn();
+//     });
 
-    it('should have been run once', () => {
-      expect(MyLibrary.anotherFn).to.have.been.calledOnce;
-    });
+//     it('should have been run once', () => {
+//       expect(Arduino.anotherFn).to.have.been.calledOnce;
+//     });
 
-    it('should have always returned "ok, friend"', () => {
-      expect(MyLibrary.anotherFn).to.have.always.returned('ok, friend');
-    });
-  });
-});
+//     it('should have always returned "ok, friend"', () => {
+//       expect(Arduino.anotherFn).to.have.always.returned('ok, friend');
+//     });
+//   });
+// });
