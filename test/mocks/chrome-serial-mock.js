@@ -1,5 +1,6 @@
 import Mock from './mock';
 import ChromeSerialCallbackParameters from '../fixtures/chrome-serial-callback-parameters';
+// import Avr109Commands from '../../src/arv109-commands';
 
 class ChromeSerialMock extends Mock {
   constructor(connected = true) {
@@ -29,6 +30,10 @@ class ChromeSerialMock extends Mock {
     } else {
       throw Error('Unchecked runtime.lastError while running serial.disconnect: Serial connection not found.');
     }
+  }
+
+  send (connectionId, data, callback) {
+    callback('data');
   }
 }
 

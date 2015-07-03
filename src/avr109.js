@@ -1,4 +1,5 @@
 import commands from './avr109-commands';
+import Data from './data';
 // import SerialApiWrapper from './serial-api-wrapper';
 
 class Avr109 {
@@ -44,12 +45,7 @@ class Avr109 {
   // TODO: ************************************
   downloadSketch () {
     var serial = this.serial;
-    var data = // MAKE A DATA OBJECT!  Duh
-    // data object has an `add` method that takes a hex value or an array of hex values.
-    // add pushes that object onto an array
-    // to_bin returns the data as binary
-    // to_hex returns the data as hex
-    // this is likely very much like intelHex
+    var data = new Data([103, 0, 128, 70]);
     this.startProgramming().then( function (success) {
       if (success) {
         serial.send(data).then( function (res) {
@@ -66,10 +62,12 @@ class Avr109 {
       board.kickBootloader().then( function (success) {
         if (success) {
           board.serial.connect().then( function () {
-            board.enterProgrammingMode.then( function (success2) {
+            board.enterProgrammingMode().then( function (success2) {
               if (success2) {
                 resolve(true);
               }
+            }).catch( function (fail2) {
+              throw new Error('Could not enter programming mode : ' + fail2);
             });
           });
         }
@@ -78,30 +76,14 @@ class Avr109 {
   }
 
   enterProgrammingMode () {
-    var serial = this.serial;
-    var data = this.hexToBin([this.commands.enterProgrammingMode]);
-    return new Promise( function (resolve) {
-      serial.send(data).then( function (success) {
-        if (success) {
-          resolve(true);
-        }
-      });
-    });
+    let serial = this.serial;
+    let data = new Data(this.commands.enterProgrammingMode);
+    return serial.send(data);
   }
 
   // enterProgramModePayload = [0x50]
 
   // downloadSketchPayload = [103, 0, 128, 70]
-
-  hexToBin (hex) {
-    var buffer = new ArrayBuffer(hex.length);
-    var bufferView = new Uint8Array(buffer);
-    for (var i = 0; i < hex.length; i++) {
-      bufferView[i] = hex[i];
-    }
-
-    return buffer;
-  }
 
   // PRIVATE
 

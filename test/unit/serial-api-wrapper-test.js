@@ -1,3 +1,4 @@
+import Data from '../../src/data';
 import SerialApiWrapper from '../../src/serial-api-wrapper';
 import ChromeSerialCallbackParameters from '../fixtures/chrome-serial-callback-parameters';
 import ChromeSerialMock from '../mocks/chrome-serial-mock';
@@ -95,11 +96,34 @@ describe('SerialApiWrapper', () => {
     });
 
     describe('#send', function() {
-      it('should be awesome', function(done) {
-        serialApiWrapper.send().then( function (res) {
-          expect(res).to.equal('something awesome');
+      let data, array;
+
+      beforeEach(function() {
+        array = [1, 2, 3];
+        data = new Data(array);
+      });
+
+      it('it must be sent a data object', function() {
+        expect( function () { serialApiWrapper.send(array); } ).to.throw();
+      });
+
+      it('it must be connected to a device', function() {
+        expect( function () { serialApiWrapper.send(data); } ).to.throw();
+      });
+
+      describe('while connected to a device', function() {
+        beforeEach(function(done) {
+          serialApiWrapper.connect();
           done();
         });
+
+        it('can send to the device', function(done) {
+          serialApiWrapper.send(data).then( function (res) {
+            expect(res).to.equal('data');
+            done();
+          });
+        });
+
       });
     });
   });

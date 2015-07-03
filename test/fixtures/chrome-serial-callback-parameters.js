@@ -31,7 +31,9 @@ var ChromeSerialCallbackParameters = {
     stopBits: 'one'
   },
 
-  disconnect: true
+  disconnect: true,
+
+  send: { bytesSent: 4 }
 };
 
 export default ChromeSerialCallbackParameters;
