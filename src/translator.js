@@ -6,8 +6,10 @@ Translator.binToHex = function (bin) {
   let byteCount = 16;
   let startAddress = 0;
   let useRecordHeader = true;
+  console.log("bin : ", bin);
 
   bin = new IntelHEX(bin, byteCount, startAddress, useRecordHeader);
+  console.log('bin IntelHEX : ', bin);
   bin.createRecords();
   return bin.getHEXFile();
 };
@@ -32,7 +34,6 @@ Translator.hexArrayToBin = function (hex) {
   for (let i = 0; i < hex.length; i++) {
     bufferView[i] = hex[i];
   }
-  console.log(buffer);
   return buffer;
 };
 

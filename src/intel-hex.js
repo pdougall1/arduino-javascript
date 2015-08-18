@@ -29,12 +29,11 @@
  * @param data    a string of a HEX file to be parsed
  * @returns IntelHEX
  */
+
+
+
 function IntelHEX(data, byteCount, startAddress, useRecordHeader)
 {
-    if (!data) {
-      throw Error('IntelHEX constructor; You must pass in data as your first argument.');
-    }
-
     this.data = data;
     if (arguments.length > 1) {
       this.byteCount = (byteCount > 255 ? 255 : byteCount);
@@ -42,27 +41,12 @@ function IntelHEX(data, byteCount, startAddress, useRecordHeader)
       this.records = [];
       this.useRecordHeader = useRecordHeader;
     } else {
-      if (!this.isHexFormat(data)) {
-        throw Error('IntelHEX constructor; Data must be in appropriate hex format.');
-      }
       this.records = data.split("\n");
     }
 
     this.RECORD_TYPE_DATA = '00';
     this.RECORD_TYPE_EOF  = '01';
 };
-
-IntelHEX.prototype.isHexFormat = function(data)
-{
-  var isHexChars = /^:([A-Fa-f0-9]{2}){8,9}/.test(data)
-  var seperatedWithNewLine = true
-  if (data.split(':').length > 2) {
-    var seperatedWithNewLine =
-    data.split(':').length === data.split("\n").length ||
-    data.split(':').length === data.split("\n").length -1
-  }
-  return isHexChars && seperatedWithNewLine
-}
 
 IntelHEX.prototype.createRecords = function()
 {
@@ -134,7 +118,7 @@ IntelHEX.prototype.createRecords = function()
  */
 IntelHEX.prototype.calculateChecksum = function(data)
 {
-    checksum = data;
+    var checksum = data;
     checksum = checksum & 255; // grab 8 LSB
     checksum = ~checksum + 1;  // two's complement
     checksum = checksum & 255; // grab 8 LSB
@@ -207,7 +191,8 @@ IntelHEX.prototype.getHEXFile = function(lineSeparator)
         lineSeparator = "\n";
     }
 
-    returnValue = '';
+    var returnValue = '';
+    var i;
     for (i = 0; i < this.records.length; i++) {
        returnValue += this.records[i] + lineSeparator;
     }
@@ -278,10 +263,6 @@ IntelHEX.prototype.getHEXAsBinaryString = function(prettyOutput)
     return binaryString;
 };
 
-
-// THIS IS IT!
-// it has the records
-// it returns binary data
 IntelHEX.prototype.parse = function() {
   var kStartcodeBytes = 1;
   var kSizeBytes = 2;
@@ -408,3 +389,5 @@ IntelHEX.prototype.parse = function() {
   console.log("Never found EOF!");
   return "FAIL";
 }
+
+export default IntelHEX;

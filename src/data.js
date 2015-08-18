@@ -9,6 +9,7 @@ import translator from './translator';
 class Data {
   constructor (data) {
     this.hexArray = [];
+    this.binary = null;
 
     if (data !== undefined) {
       this.addHex(data);
@@ -18,12 +19,23 @@ class Data {
   // INTERFACE
 
   getHex () {
+    let hexArray = this.hexArray;
+    let binary = this.binary;
+    if (hexArray.length > 0) {
+      return hexArray;
+    } else if (binary) {
+      return translator.binToHex(binary);
+    }
     return this.hexArray;
   }
 
   getBin () {
+    let binary = this.binary;
     let hexArray = this.hexArray;
-    if (hexArray.length > 0) {
+
+    if (binary) {
+      return binary
+    } else if (hexArray.length > 0) {
       return translator.hexArrayToBin(hexArray);
     }
   }
@@ -31,6 +43,10 @@ class Data {
   addHex (data) {
     let hex = this.coerceToHex(data);
     this.hexArray = this.hexArray.concat(hex);
+  }
+
+  addBin (data) {
+    this.binary = data;
   }
 
   // PRIVATE

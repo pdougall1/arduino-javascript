@@ -3,8 +3,8 @@ const Avr109Commands = {
   enterProgrammingMode: 0x50, // P
   leaveProgrammingMode: 0x4c, // L 76
   setAddress: 0x41, // A
-  write: 0x42, // B; TODO: WRITE_PAGE
-  readFuseBits: 0x46, // F TYPE_FLASH
+  writePage: 0x42, // B; TODO: WRITE_PAGE
+  typeFlash: 0x46, // F TYPE_FLASH
   exitBootloader: 0x45, // E
   readPage: 0x67, // g
   cr: 0x0D, // 13

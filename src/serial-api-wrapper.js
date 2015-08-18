@@ -1,5 +1,6 @@
 // Fortunately any problems with parameters passed into chrome.serial throws an error
 import Data from './data';
+import translator from './translator';
 
 let connectionOptions = {
   persistent: false, // Flag indicating whether or not the connection should be left open when the application is suspended (see Manage App Lifecycle). The default value is "false." When the application is loaded, any serial connections previously opened with persistent=true can be fetched with getConnections.
@@ -65,18 +66,23 @@ class SerialApiWrapper {
     });
   }
 
-  // must pass a data object
+  // must pass a Data instance
   send (data) {
     this.validateData(data);
     this.validateConnection();
     let id = this.connection.id;
     let serialApi = this.serialApi;
+    console.log('PAYLOAD 2 : ', translator.binToHex2(data.getBin()));
 
     return new Promise( function (resolve) {
       serialApi.send(id, data.getBin(), function (res) {
         resolve(res);
       });
     });
+  }
+
+  listen (callback) {
+    this.serialApi.onReceive.addListener(callback);
   }
 
   // PRIVATE

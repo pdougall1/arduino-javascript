@@ -1,5 +1,6 @@
 import SerialApiWrapper from './serial-api-wrapper';
 import Avr109 from './avr109';
+import ModBin from './mod-bin';
 
 class Arduino {
   constructor (serialApi, Board = Avr109) {
@@ -23,14 +24,35 @@ class Arduino {
     return this.serial.disconnect(this.serial.connection.id);
   }
 
-  getSketch () {
+  getSketch (downloadCallback) {
     this.validateConnection();
-    var board = new this.Board(this.serial);
-    return board.downloadSketch();
-    // TODO: delete board
+    let board = this.getBoard();
+    var downloadCallback = downloadCallback || this.defaultDownloadCallback;
+    return board.downloadSketch(downloadCallback);
+  }
+
+  defaultDownloadCallback () {
+    console.log('Default downloadCallback called.');
+  }
+
+  // sketch must be an array of hex values
+  uploadSketch (sketch) {
+    this.validateConnection();
+    let board = this.getBoard();
+    return board.uploadSketch(sketch || ModBin);
   }
 
   // PRIVATE
+
+  getBoard () {
+    if (this.board) {
+      return this.board;
+    } else {
+      let board = new this.Board(this.serial);
+      this.board = board;
+      return board;
+    }
+  }
 
   validateConnection () {
     if (this.serial.connection) {
