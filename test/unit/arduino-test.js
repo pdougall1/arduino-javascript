@@ -13,7 +13,7 @@ describe('Arduino', () => {
   });
 
   describe('has a board', function() {
-    it('has a default Avr109 board', function() {
+    it('that is Avr109 by default', function() {
       var serial = new SerialApiWrapper(serialApi, { path: 'path/to/device'});
       serial.connect();
       expect(new arduino.Board(serial)).to.be.an.instanceof(Avr109);

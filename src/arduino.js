@@ -27,8 +27,8 @@ class Arduino {
   getSketch (downloadCallback) {
     this.validateConnection();
     let board = this.getBoard();
-    var downloadCallback = downloadCallback || this.defaultDownloadCallback;
-    return board.downloadSketch(downloadCallback);
+    var callback = downloadCallback || this.defaultDownloadCallback;
+    return board.downloadSketch(callback);
   }
 
   defaultDownloadCallback () {

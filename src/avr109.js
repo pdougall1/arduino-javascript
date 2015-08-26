@@ -1,5 +1,5 @@
 import translator from './translator';
-import SerialApiWrapper from './serial-api-wrapper';
+// import SerialApiWrapper from './serial-api-wrapper';
 import commands from './avr109-commands';
 import Data from './data';
 
@@ -26,22 +26,22 @@ class Avr109 {
 
   downloadSketch (downloadCallback) {
     this.downloadCallback = downloadCallback;
-    let _this = this;
+    let self = this;
     return this.startProgramming().then( function (success) {
       if (success) {
-        _this.readSketchPages().then( function (success) {
-          console.log("Finished reading sketch pages.");
+        self.readSketchPages().then( function () {
+          console.log('Finished reading sketch pages.');
         });
       }
     });
   }
 
   uploadSketch (sketch) {
-    let _this = this;
+    let self = this;
     return this.startProgramming().then( function (success) {
       if (success) {
-        _this.writeSketchPages(sketch).then( function (success) {
-          console.log("Finished uploading sketch.");
+        self.writeSketchPages(sketch).then( function () {
+          console.log('Finished uploading sketch.');
         });
       }
     });
@@ -55,25 +55,24 @@ class Avr109 {
   }
 
   readSketchPages () {
-    let _this = this;
-    return new Promise( function (resolve, reject) {
-      _this.setAddressTo(0).then( function (res) {
-        _this.readPage(0);
+    let self = this;
+    return new Promise( function (resolve) {
+      self.setAddressTo(0).then( function () {
+        self.readPage(0);
       });
       resolve(true);
     });
   }
 
   writeSketchPages (sketch) {
-    let _this = this;
-    return new Promise( function (resolve, reject) {
-      _this.setAddressTo(0).then( function (res) {
-        _this.writePage(0, sketch);
+    let self = this;
+    return new Promise( function (resolve) {
+      self.setAddressTo(0).then( function () {
+        self.writePage(0, sketch);
         resolve(true);
       });
     });
   }
-
 
   // TODO: refactor these to a recurseThroughPages method to
   readPage (pageNum) {
@@ -88,7 +87,7 @@ class Avr109 {
 
       board.responseHandler = this.readPageHandler;
 
-      this.serial.send(data).then( function (res) {
+      this.serial.send(data).then( function () {
         board.readPage(pageNum + 1);
       });
     }
@@ -114,14 +113,14 @@ class Avr109 {
       let data = new Data([writePage, sizeBytes[0], sizeBytes[1], typeFlash]);
       data.addHex(payload);
 
-      this.serial.send(data).then( function (res) {
+      this.serial.send(data).then( function () {
         board.writePage(pageNum + 1, sketch);
       });
     }
   }
 
   pad (payload) {
-    while (payload.length % this.pageSize != 0) {
+    while (payload.length % this.pageSize !== 0) {
       payload.push(0);
     }
     return payload;
@@ -130,36 +129,35 @@ class Avr109 {
   readPageHandler (args) {
     let hexData = translator.binToHex2(args.data);
     let pages = this.pages;
-    console.log("Got: " + hexData);
+    console.log('Got: ' + hexData);
     pages.push(hexData);
     if (pages.length >= this.totalPages) {
       let data = [].concat.apply([], pages);
       let sketch = translator.binToHex(data);
-      console.log("sketch : ", sketch);
+      console.log('sketch : ', sketch);
       this.downloadCallback(sketch);
       this.stopProgramming();
     }
   }
 
-  defaultHandler (response) {
+  defaultHandler () {
     console.log('Basic response handler called.');
   };
 
   setAddressTo (bitNum) {
-    let _this = this;
+    let self = this;
     let pageNum = (pageNum - 1) * this.pageSize;
     return new Promise( function (resolve) {
-      let setAddress = _this.commands.setAddress;
+      let setAddress = self.commands.setAddress;
       var addressBytes = translator.storeAsTwoBytes(bitNum);
-      let data = new Data([setAddress, addressBytes[1], addressBytes[0]])
-      _this.serial.send(data).then( function (res) {
+      let data = new Data([setAddress, addressBytes[1], addressBytes[0]]);
+      self.serial.send(data).then( function (res) {
         resolve(res);
       });
     });
   }
 
   kickBootloaderConnect () {
-    var board = this;
     var bitrate = this.bootloaderBitrate;
     var dataBitrate = this.dataBitrate;
     var serial = this.serial;
@@ -179,7 +177,7 @@ class Avr109 {
               } else {
                 // the bootloader needs 2 seconds to get ready
                 setTimeout(function() {
-                  console.log("Reconnecting...");
+                  console.log('Reconnecting...');
                   serial.connect(dataBitrate).then( function () {
                     resolve(true);
                   });
@@ -195,7 +193,7 @@ class Avr109 {
   startProgramming () {
     let board = this;
     return new Promise( function (resolve) {
-      board.kickBootloaderConnect().then( function (success) {
+      board.kickBootloaderConnect().then( function () {
         board.enterProgrammingMode().then( function (success2) {
           if (success2) {
             resolve(true);

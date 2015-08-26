@@ -34,7 +34,7 @@ class Data {
     let hexArray = this.hexArray;
 
     if (binary) {
-      return binary
+      return binary;
     } else if (hexArray.length > 0) {
       return translator.hexArrayToBin(hexArray);
     }

@@ -14,9 +14,10 @@ describe('Avr109', () => {
     avr109 = new Avr109(serial);
   });
 
-  describe('#kickBootloader', function() {
+  describe('#kickBootloaderConnect', function() {
     it('will kick off the bootloader', function(done) {
-      avr109.kickBootloader().then( function (status) {
+      this.timeout(5000);
+      avr109.kickBootloaderConnect().then( function (status) {
         expect(status).to.equal(true);
         done();
       });

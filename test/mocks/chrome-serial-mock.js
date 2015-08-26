@@ -6,6 +6,11 @@ class ChromeSerialMock extends Mock {
   constructor(connected = true) {
     super();
     this.connected = connected;
+    this.onReceive = {
+      addListener: function () {
+        return true;
+      }
+    };
   }
 
   getDevices(callback) {
