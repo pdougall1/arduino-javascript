@@ -1,6 +1,7 @@
 import SerialApiWrapper from './serial-api-wrapper';
 import Avr109 from './avr109';
 import ModBin from './mod-bin';
+import Data from './data';
 
 class Arduino {
   constructor (serialApi, Board = Avr109) {
@@ -37,9 +38,16 @@ class Arduino {
 
   // sketch must be an array of hex values
   uploadSketch (sketch) {
+    let data;
+    if (sketch) {
+      data = new Data(sketch, 'intelHEX');
+    } else {
+      data = new Data(ModBin, 'binary');
+    }
+
     this.validateConnection();
     let board = this.getBoard();
-    return board.uploadSketch(sketch || ModBin);
+    return board.uploadSketch(data);
   }
 
   // PRIVATE

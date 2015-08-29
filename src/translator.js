@@ -2,14 +2,14 @@ import IntelHEX from './intel-hex';
 
 const Translator = {};
 
+Translator.binToIntelHEX = Translator.binToHex;
+
 Translator.binToHex = function (bin) {
   let byteCount = 16;
   let startAddress = 0;
   let useRecordHeader = true;
-  console.log('bin : ', bin);
 
   bin = new IntelHEX(bin, byteCount, startAddress, useRecordHeader);
-  console.log('bin IntelHEX : ', bin);
   bin.createRecords();
   return bin.getHEXFile();
 };
@@ -23,7 +23,7 @@ Translator.binToHex2 = function (bin) {
   return hexes;
 };
 
-Translator.hexBlobToBin = function (hex) {
+Translator.intelHEXToBin = function (hex) {
   hex = new IntelHEX(hex);
   return hex.parse();
 };

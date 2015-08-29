@@ -7,7 +7,6 @@ import Avr109 from '../../src/avr109';
 describe('Avr109', () => {
   var avr109, serial, serialApi;
   beforeEach(function() {
-    // response = ChromeSerialCallbackParameters;
     serialApi = new ChromeSerialMock();
     serial = new SerialApiWrapper(serialApi, { path: 'path/to/device' });
     serial.connect();
@@ -16,7 +15,7 @@ describe('Avr109', () => {
 
   describe('#kickBootloaderConnect', function() {
     it('will kick off the bootloader', function(done) {
-      this.timeout(5000);
+      this.timeout(10000);
       avr109.kickBootloaderConnect().then( function (status) {
         expect(status).to.equal(true);
         done();

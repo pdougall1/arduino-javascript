@@ -3,50 +3,48 @@
 //   arrays of single hex values
 //   arrays of "pages" of values (I guess hex and binary?)
 //   I guess binary data, whatever form that holds
-
+// For consistancy content is kept as binary
 import translator from './translator';
 
-class Data {
-  constructor (data) {
-    this.hexArray = [];
-    this.binary = null;
+let defaultPageSize = 128;
 
-    if (data !== undefined) {
-      this.addHex(data);
+class Data {
+  constructor (data, type, pageSize) {
+    this.content = [];
+    this.pageSize = pageSize || defaultPageSize;
+
+    switch (type) {
+      case 'binary':
+        this.addBin(data);
+        break;
+      case 'intelHEX':
+        this.addIntelHex(data);
+        break;
+      default:
+        this.addHex(data);
+        break;
     }
   }
 
   // INTERFACE
 
-  getHex () {
-    let hexArray = this.hexArray;
-    let binary = this.binary;
-    if (hexArray.length > 0) {
-      return hexArray;
-    } else if (binary) {
-      return translator.binToHex(binary);
-    }
-    return this.hexArray;
-  }
-
   getBin () {
-    let binary = this.binary;
-    let hexArray = this.hexArray;
-
-    if (binary) {
-      return binary;
-    } else if (hexArray.length > 0) {
-      return translator.hexArrayToBin(hexArray);
-    }
+    return translator.hexArrayToBin(this.content);
   }
 
   addHex (data) {
-    let hex = this.coerceToHex(data);
-    this.hexArray = this.hexArray.concat(hex);
+    // let bin = translator.binToHex2(data);
+    this.content = this.content.concat(data);
   }
 
   addBin (data) {
-    this.binary = data;
+    this.content = this.content.concat(data);
+  }
+
+  addIntelHex (data) {
+    let bin = translator.intelHEXToBin(data);
+    let newContent = this.content.concat(bin);
+    this.content = newContent;
   }
 
   // PRIVATE
@@ -85,6 +83,11 @@ class Data {
         (data.split(':').length === data.split('\n').length - 1);
     }
     return isHexChars && seperatedWithNewLine;
+  }
+
+  getPage(pageNum) {
+    let page = this.content.splice(pageNum * this.pageSize, (pageNum + 1) * this.pageSize);
+    return translator.hexArrayToBin(page);
   }
 }
 

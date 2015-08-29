@@ -36,11 +36,11 @@ class Avr109 {
     });
   }
 
-  uploadSketch (sketch) {
+  uploadSketch (data) {
     let self = this;
     return this.startProgramming().then( function (success) {
       if (success) {
-        self.writeSketchPages(sketch).then( function () {
+        self.writeSketchPages(data).then( function () {
           console.log('Finished uploading sketch.');
         });
       }
@@ -64,11 +64,12 @@ class Avr109 {
     });
   }
 
-  writeSketchPages (sketch) {
+  writeSketchPages (data) {
+    console.log('writing sketch pages');
     let self = this;
     return new Promise( function (resolve) {
       self.setAddressTo(0).then( function () {
-        self.writePage(0, sketch);
+        self.writePage(0, data);
         resolve(true);
       });
     });
@@ -93,7 +94,7 @@ class Avr109 {
     }
   }
 
-  writePage (pageNum, sketch) {
+  writePage (pageNum, dataObj) {
     let board = this;
     if (pageNum === this.totalPages) {
       return true;
@@ -102,7 +103,7 @@ class Avr109 {
       let writePage = this.commands.writePage;
       let typeFlash = this.commands.typeFlash;
       let sizeBytes = translator.storeAsTwoBytes(pageSize);
-      let payload = sketch.slice(pageNum * pageSize, (pageNum + 1) * pageSize);
+      let payload = dataObj.getPage(pageNum);
 
       if (payload.length < 1) {
         this.stopProgramming();
@@ -114,7 +115,7 @@ class Avr109 {
       data.addHex(payload);
 
       this.serial.send(data).then( function () {
-        board.writePage(pageNum + 1, sketch);
+        board.writePage(pageNum + 1, dataObj);
       });
     }
   }
@@ -194,7 +195,9 @@ class Avr109 {
     let board = this;
     return new Promise( function (resolve) {
       board.kickBootloaderConnect().then( function () {
+        console.log('kick bootloader')
         board.enterProgrammingMode().then( function (success2) {
+          console.log('enter programming mode')
           if (success2) {
             resolve(true);
           }
@@ -207,7 +210,9 @@ class Avr109 {
 
   enterProgrammingMode () {
     let serial = this.serial;
-    let data = new Data(this.commands.enterProgrammingMode);
+    let data = new Data(this.commands.enterProgrammingMode, 'hex');
+    console.log('programming mode', this.commands.enterProgrammingMode);
+    console.log('DATA',data);
     return serial.send(data);
   }
 
