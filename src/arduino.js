@@ -4,9 +4,9 @@ import ModBin from './mod-bin';
 import Data from './data';
 
 class Arduino {
-  constructor (serialApi, Board = Avr109) {
+  constructor (serialApi, Protocol = Avr109) {
     this.serialApi = serialApi;
-    this.Board = Board;
+    this.Protocol = Protocol;
   }
 
   getDevices () {
@@ -56,7 +56,7 @@ class Arduino {
     if (this.board) {
       return this.board;
     } else {
-      let board = new this.Board(this.serial);
+      let board = new this.Protocol(this.serial);
       this.board = board;
       return board;
     }

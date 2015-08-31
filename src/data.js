@@ -86,8 +86,8 @@ class Data {
   }
 
   getPage(pageNum) {
-    let page = this.content.splice(pageNum * this.pageSize, (pageNum + 1) * this.pageSize);
-    return translator.hexArrayToBin(page);
+    let page = this.content.slice(pageNum * this.pageSize, (pageNum + 1) * this.pageSize);
+    return page;
   }
 }
 
